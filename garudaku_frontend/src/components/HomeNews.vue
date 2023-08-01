@@ -1,6 +1,7 @@
 <template>
   <div :class="{ darkMode: darkMode }">
     <h1>Daftar Berita</h1>
+    <p class="switch">Switch Mode</p>
     <button @click="toggleDarkMode" class="dark-mode-button">
       <span class="moon"></span>
       <span class="sun"></span>
@@ -88,6 +89,7 @@ div {
     margin-bottom: 15px;
   }
 
+
   router-link {
     display: inline-block;
     padding: 8px 16px;
@@ -96,10 +98,6 @@ div {
     text-decoration: none;
     border-radius: 4px;
     transition: background-color 0.2s ease-in-out;
-
-    &:hover {
-      background-color: #0056b3;
-    }
   }
 
   &.darkMode {
@@ -116,6 +114,23 @@ div {
     router-link {
       color: #333;
     }
+    .switch{
+    color: #fff;
+  }
+    .dark-mode-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.2);
+    background-color: transparent
+  }
+}
   }
 
   .berita-container {
@@ -157,6 +172,7 @@ div {
 
   &:hover {
     transform: scale(1.2);
+    background-color: transparent
   }
 }
 
