@@ -1,11 +1,12 @@
 <template>
   <div class="detail-berita-container" v-if="editNews">
+    <h1 class ="head">Detail Berita</h1>
     <h1>{{ editNews.title }}</h1>
     <img v-if="editNews.thumbnail" :src="editNews.thumbnail" alt="Thumbnail" class="berita-thumbnail">
     <div class="berita-content">
       <p class="berita-description">{{ editNews.description }}</p>
       <button
-          @click.prevent="goToEditBerita"
+          @click.prevent="goToEditNews"
         >
           Edit Berita
       </button>
@@ -19,14 +20,15 @@
 <script>
 import { mapState } from 'vuex';
 export default {
+  name:"detailNews",
   data(){
     return {editNews:{}}
   },
   computed: {
-    ...mapState(['berita']),
+    ...mapState(['news']),
   },
   methods: {
-    goToEditBerita() {
+    goToEditNews() {
       const slug = this.editNews.title.toLowerCase()
         .replace(/ /g, '-')
         .replace(/[^\w-]+/g, '');
@@ -36,10 +38,11 @@ export default {
     },
   mounted(){
     const title = this.$route.query.title
-    const filteredNews = this.berita.filter(el=>
+    const filteredNews = this.news.filter(el=>
       el.title==title
     )
     this.editNews=filteredNews[0]
+    console.log(this.news)
   },
     
   };
@@ -58,6 +61,15 @@ export default {
     margin-bottom: 20px;
     color: #333;
     text-align: center;
+  }
+  
+  .head
+  {
+    font-size: 36px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   .berita-thumbnail {

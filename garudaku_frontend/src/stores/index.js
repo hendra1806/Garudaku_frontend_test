@@ -6,39 +6,43 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    berita: [],
-    editedNews:[],
+    news: JSON.parse(localStorage.getItem("news_data")) || [],
     darkMode: false
   },
   mutations: {
-    SET_BERITA(state, data) {
-      state.berita = data;
+    SET_NEWS(state, data) {
+      state.news = data;
+      localStorage.setItem("news_data", JSON.stringify(data))
     },
-    EDIT_BERITA(state, {newData, title}) {
-      const indexToReplace = state.berita.findIndex(el => el.title === title)
-      state.berita[indexToReplace]= newData
+    EDIT_NEWS(state, {newData, title}) {
+      const indexToReplace = state.news.findIndex(el => el.title === title)
+      state.news[indexToReplace]= newData
     },
     TOGGLE_DARK_MODE(state) {
       state.darkMode = !state.darkMode;
     }
   },
   actions: {
-    fetchBerita(context) {
-      axios.get('https://api-berita-indonesia.vercel.app/cnn/terbaru')
+    fetchNews(context) {
+      if(this.news.length===0){
+        axios.get('https://api-berita-indonesia.vercel.app/cnn/terbaru')
         .then(response => {
-          const beritaData = response.data.data.posts;
-          context.commit('SET_BERITA', beritaData);
+          const newsData = response.data.data.posts;
+          localStorage.setItem('news', JSON.stringify(newsData));
+          context.commit('SET_NEWS', newsData);
+          console.log("fecthheht")
         })
         .catch(error => {
           console.error(error);
         });
+      }
     },
     toggleDarkMode(context) {
       context.commit('TOGGLE_DARK_MODE');
     }
   },
   getters: {
-    getBerita: state => state.berita,
+    getNews: state => state.news,
   },
   
 });
