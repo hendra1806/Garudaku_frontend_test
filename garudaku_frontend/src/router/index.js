@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import HomeBerita from '@/components/HomeBerita.vue';
-import DetailBerita from '@/components/DetailBerita.vue';
-import EditBerita from '@/components/EditBerita.vue';
+import HomeNews from '@/components/HomeNews.vue';
+import DetailNews from '@/components/DetailNews.vue';
+import EditNews from '@/components/EditNews.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', component: HomeBerita },
-  { path: '/detail/:slug', component: DetailBerita, props: true},
-  { path: '/edit/:slug', component: EditBerita }
+  { path: '/', component: HomeNews },
+  { path: '/detail/:slug', component: DetailNews, props: true},
+  { path: '/edit/:slug', component: EditNews }
 ];
 
 const router = new VueRouter({

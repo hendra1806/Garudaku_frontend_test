@@ -5,8 +5,11 @@
       <span class="moon"></span>
       <span class="sun"></span>
     </button>
-    <div v-if="berita && berita.length" class="berita-container">
-      <berita-card v-for="(beritaItem, index) in berita" :key="index" :beritaItem="beritaItem" />
+    <!-- <button @click="getNews" class="update-berita-button">
+      <h2>Update Berita</h2>
+    </button> -->
+    <div v-if="news && news.length" class="berita-container">
+      <NewsCard v-for="(newsItem, index) in news" :key="index" :newsItem="newsItem" />
     </div>
     <div v-else>
       <p>Tidak ada berita yang tersedia.</p>
@@ -16,48 +19,52 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-import BeritaCard from '@/components/BeritaCard.vue';
+import NewsCard from './NewsCard.vue';
 
 export default {
-  components:{
-    BeritaCard,
+  name: 'HomeNews',
+  components: {
+    NewsCard,
   },
   computed: {
-    ...mapState(['berita', 'darkMode']),
+    ...mapState(['news', 'darkMode']),
   },
   methods: {
     ...mapMutations(['TOGGLE_DARK_MODE']),
     toggleDarkMode() {
       this.TOGGLE_DARK_MODE();
     },
-    goToDetailBerita() {
-      
-      const slug = this.beritaItem.title.toLowerCase()
-        .replace(/ /g, '-')
-        .replace(/[^\w-]+/g, '');
-      
+    goToDetailNews(newsItem) {
+      const slug = newsItem.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
       this.$router.push(`/detail/${slug}`);
     },
-    GetNews(){
-      this.$store.dispatch('fetchBerita');
+    // getNews() {
+    //   this.$store.dispatch('fetchNews');
+    // },
+  },
+  mounted() {
+    if (this.news.length === 0) {
+      this.$store.dispatch('fetchNews');
     }
   },
-  // mounted() {
-  //   this.$store.dispatch('fetchBerita');
-  // },
 };
 </script>
 
 <style lang="scss">
+$primary-color: #007bff;
+$secondary-color: #f0e68c;
+$background-color: #fff;
+$button-background-color: transparent;
+$button-text-color: #333;
+$button-hover-background-color: transparent;
+
 div {
   padding: 20px;
   transition: background-color 0.3s ease-in-out;
-  
-  
 
   h1 {
     font-size: 36px;
-    color: #007bff; /* Blue color */
+    color: $primary-color;
     text-align: center;
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
@@ -99,6 +106,7 @@ div {
     background-color: #333;
     color: #333;
 
+
     h1 {
       color: #fff;
     }
@@ -108,7 +116,6 @@ div {
     router-link {
       color: #333;
     }
-
   }
 
   .berita-container {
@@ -138,6 +145,7 @@ div {
     align-items: flex-start;
   }
 }
+
 .dark-mode-button {
   background-color: transparent;
   border: none;
@@ -145,12 +153,11 @@ div {
   position: relative;
   width: 40px;
   height: 40px;
-
   transition: transform 0.3s ease-in-out;
-}
 
-.dark-mode-button:hover {
-  transform: scale(1.2);
+  &:hover {
+    transform: scale(1.2);
+  }
 }
 
 .moon-sun {
@@ -162,7 +169,8 @@ div {
   transform-origin: center;
 }
 
-.moon, .sun {
+.moon,
+.sun {
   position: absolute;
   width: 20px;
   height: 20px;
@@ -172,14 +180,12 @@ div {
 .moon {
   background-color: #f0e68c;
   box-shadow: 4px 0 #333, 0 4px #333, -4px 0 #333, 0 -4px #333;
-
   animation: moonAnimation 2s infinite;
 }
 
 .sun {
   background-color: #f0e68c;
   box-shadow: 0 0 #333;
-
   animation: sunAnimation 2s infinite;
 }
 
@@ -204,9 +210,9 @@ div {
   transition: background-color 0.3s ease-in-out;
 }
 
-.dark-mode-button.darkMode .toggle-switch {
-  background-color: #007bff;
-}
+// .dark-mode-button.darkMode .toggle-switch {
+//   background-color: #007bff;
+// }
 
 @keyframes moonAnimation {
   0% {
