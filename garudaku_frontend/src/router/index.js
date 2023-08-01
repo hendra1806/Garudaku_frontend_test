@@ -8,8 +8,8 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: '/', component: HomeBerita },
-  { path: '/detail/:idOrIndex', component: DetailBerita },
-  { path: '/edit/:idOrIndex', component: EditBerita }
+  { path: '/detail/:slug', component: DetailBerita, props: true},
+  { path: '/edit/:slug', component: EditBerita }
 ];
 
 const router = new VueRouter({

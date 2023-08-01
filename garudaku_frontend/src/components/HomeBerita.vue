@@ -6,15 +6,7 @@
       <span class="sun"></span>
     </button>
     <div v-if="berita && berita.length" class="berita-container">
-      <div v-for="(beritaItem, index) in berita" :key="index" class="berita-item">
-        <img v-if="beritaItem.thumbnail" :src="beritaItem.thumbnail" alt="Thumbnail" class="berita-thumbnail">
-        <div class="berita-content">
-          <h2>{{ beritaItem.title }}</h2>
-          <p>{{ beritaItem.potonganArtikel }}</p>
-          <router-link :to="`/detail/${beritaItem.id || index}`">Baca Selengkapnya</router-link>
-          <router-link :to="`/edit/${beritaItem.id || index}`" class="edit-button">Edit Berita</router-link>
-        </div>
-      </div>
+      <berita-card v-for="(beritaItem, index) in berita" :key="index" :beritaItem="beritaItem" />
     </div>
     <div v-else>
       <p>Tidak ada berita yang tersedia.</p>
@@ -24,8 +16,12 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
+import BeritaCard from '@/components/BeritaCard.vue';
 
 export default {
+  components:{
+    BeritaCard,
+  },
   computed: {
     ...mapState(['berita', 'darkMode']),
   },
@@ -34,10 +30,21 @@ export default {
     toggleDarkMode() {
       this.TOGGLE_DARK_MODE();
     },
+    goToDetailBerita() {
+      
+      const slug = this.beritaItem.title.toLowerCase()
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '');
+      
+      this.$router.push(`/detail/${slug}`);
+    },
+    GetNews(){
+      this.$store.dispatch('fetchBerita');
+    }
   },
-  created() {
-    this.$store.dispatch('fetchBerita');
-  },
+  // mounted() {
+  //   this.$store.dispatch('fetchBerita');
+  // },
 };
 </script>
 

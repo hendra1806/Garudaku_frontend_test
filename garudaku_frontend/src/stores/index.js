@@ -7,19 +7,16 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     berita: [],
+    editedNews:[],
     darkMode: false
   },
   mutations: {
     SET_BERITA(state, data) {
       state.berita = data;
     },
-    EDIT_BERITA(state, { slug, gambar, judul, isiBerita }) {
-      const index = state.berita.findIndex(berita => berita.slug === slug);
-      if (index !== -1) {
-        state.berita[index].gambar = gambar;
-        state.berita[index].judul = judul;
-        state.berita[index].isiBerita = isiBerita;
-      }
+    EDIT_BERITA(state, {newData, title}) {
+      const indexToReplace = state.berita.findIndex(el => el.title === title)
+      state.berita[indexToReplace]= newData
     },
     TOGGLE_DARK_MODE(state) {
       state.darkMode = !state.darkMode;

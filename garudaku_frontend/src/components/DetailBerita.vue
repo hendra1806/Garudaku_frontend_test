@@ -1,38 +1,49 @@
 <template>
-    <div class="detail-berita-container" v-if="beritaItem">
-      <h1>{{ beritaItem.title }}</h1>
-      <img v-if="beritaItem.thumbnail" :src="beritaItem.thumbnail" alt="Thumbnail" class="berita-thumbnail">
-      <div class="berita-content">
-        <p class="berita-description">{{ beritaItem.description }}</p>
-        <router-link :to="`/edit/${beritaItem.id || index}`" class="edit-button">Edit Berita</router-link>
-      </div>
+  <div class="detail-berita-container" v-if="editNews">
+    <h1>{{ editNews.title }}</h1>
+    <img v-if="editNews.thumbnail" :src="editNews.thumbnail" alt="Thumbnail" class="berita-thumbnail">
+    <div class="berita-content">
+      <p class="berita-description">{{ editNews.description }}</p>
+      <button
+          @click.prevent="goToEditBerita"
+        >
+          Edit Berita
+      </button>
     </div>
-    <div v-else>
-      <p>Loading...</p>
-    </div>
-  </template>
-  
-  <script>
-  import { mapState } from 'vuex';
-  
-  export default {
-    computed: {
-      ...mapState(['berita']),
-      beritaItem() {
-        const idOrIndex = this.$route.params.idOrIndex;
-        if (Number.isInteger(+idOrIndex)) {
-          const index = parseInt(idOrIndex, 10);
-          return this.berita[index] || null;
-        } else {
-          return this.berita.find(item => item.id === idOrIndex) || null;
-        }
-      },
+  </div>
+  <div v-else>
+    <p>Loading...</p>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+export default {
+  data(){
+    return {editNews:{}}
+  },
+  computed: {
+    ...mapState(['berita']),
+  },
+  methods: {
+    goToEditBerita() {
+      const slug = this.editNews.title.toLowerCase()
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '');
+      
+      this.$router.push({path:`/edit/${slug}`,query:{title:this.editNews.title}});
     },
-    created() {
-      this.$store.dispatch('fetchBerita');
     },
+  mounted(){
+    const title = this.$route.query.title
+    const filteredNews = this.berita.filter(el=>
+      el.title==title
+    )
+    this.editNews=filteredNews[0]
+  },
+    
   };
-  </script>
+</script>
   
   <style lang="scss">
 
